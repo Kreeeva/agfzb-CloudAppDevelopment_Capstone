@@ -1,7 +1,7 @@
 import requests
 import json
 # import related models here
-from .models import CarDealer
+from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
 
 
@@ -12,9 +12,15 @@ def get_request(url, **kwargs):
     print(kwargs)
     print("GET from {} ".format(url))
     try:
-        # Call get method of requests library with URL and parameters
-        response = requests.get(url, headers={'Content-Type': 'application/json'},
-                                    params=kwargs)
+
+        if api_key:
+        # Basic authentication GET
+            requests.get(url, params=params, headers={'Content-Type': 'application/json'},
+                                        auth=HTTPBasicAuth('apikey', api_key))
+        else:
+            # Call get method of requests library with URL and parameters
+            response = requests.get(url, headers={'Content-Type': 'application/json'},
+                                        params=kwargs)
     except:
         # If any error occurs
         print("Network exception occurred")
@@ -103,6 +109,17 @@ def get_dealer_reviews_from_cf(url, **kwargs):
 # def analyze_review_sentiments(text):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative
-
+def analyze_review_sentiments(text):
+    url = "https://api.us-south.natural-language-understanding.watson.cloud.ibm.com/instances/5bb69077-cc5b-48eb-9f17-ceb25300b5b5"
+    api_key = "7XvnkavpYfv-_OTr7Jsn0XoAIu1S7AcW_yGOMvYUzTSf"
+    authenticator = IAMAuthenticator(api_key)
+    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
+    natural_language_understanding.set_service_url(url)
+    response = natural_language_understanding.analyze( text=text+"hello hello hello",features=Features(sentiment=SentimentOptions(targets=[text+"hello hello hello"]))).get_result()
+    label=json.dumps(response, indent=2)
+    label = response['sentiment']['document']['label']
+    
+    
+    return(label)
 
 

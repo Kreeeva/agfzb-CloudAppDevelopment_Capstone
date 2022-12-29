@@ -77,3 +77,5 @@ class DealerReview:
         self.car_year = car_year
         self.id = id
         self.sentiment = sentiment
+    def __str__(self):
+        return  "Dealer review:" + self.review
