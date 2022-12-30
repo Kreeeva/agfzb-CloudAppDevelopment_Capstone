@@ -3,6 +3,9 @@ import json
 # import related models here
 from .models import CarDealer, DealerReview
 from requests.auth import HTTPBasicAuth
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features,SentimentOptions
 
 
 # Create a `get_request` to make HTTP GET requests
@@ -73,9 +76,12 @@ def get_dealers_from_cf(url, **kwargs):
 # - Parse JSON results into a DealerView object list
 def get_dealer_by_id_from_cf(url, id):
     json_result = get_request(url, id=id)
+    
     if json_result:
         dealers = json_result[0]
+    
     dealer_doc = dealers
+    
     dealer_obj = CarDealer(address=dealers["address"], city=dealers["city"],id=dealers["id"], lat=dealers["lat"], long=dealers["long"], full_name=dealers["full_name"],short_name=dealers["short_name"], st=dealers["st"], zip=dealers["zip"])
     return dealer_obj
 
@@ -88,7 +94,7 @@ def get_dealer_reviews_from_cf(url, **kwargs):
         json_result = get_request(url)
     if json_result:
         reviews = json_result["data"]["docs"]
-        print (reviews)
+        
         for dealer_review in reviews:
             review_obj = DealerReview(dealership=dealer_review["dealership"],
                                    name=dealer_review["name"],
