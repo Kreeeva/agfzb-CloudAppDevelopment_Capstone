@@ -7,7 +7,7 @@ You must complete all the labs to successfully complete the project.
 
 ## Project Breakdown
 
-**Prework: Sign up for IBM Cloud account and create a Watson Natural language Understanding service**
+**Pre-work: Sign up for IBM Cloud account and create a Watson Natural language Understanding service**
 1. Create an IBM cloud account if you don't have one already.
 2. Create an instance of the Natural Language Understanding (NLU) service.
 
